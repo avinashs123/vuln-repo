@@ -23,6 +23,7 @@ jobs:
       with:
         languages: cpp
         queries: security-and-quality
+        build-mode: manual
 
     - name: Build project
       run: make all
