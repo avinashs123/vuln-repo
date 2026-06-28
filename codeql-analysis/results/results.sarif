@@ -1,0 +1,113 @@
+{
+  "version": "2.1.0",
+  "$schema": "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Schemata/sarif-schema-2.1.0.json",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "CodeQL",
+          "version": "2.17.6",
+          "rules": [
+            {
+              "id": "cpp/unbounded-write",
+              "name": "UnboundedWrite",
+              "shortDescription": { "text": "Unbounded write" },
+              "properties": { "problem.severity": "error" }
+            },
+            {
+              "id": "cpp/use-after-free",
+              "name": "UseAfterFree",
+              "shortDescription": { "text": "Potential use after free" },
+              "properties": { "problem.severity": "warning" }
+            },
+            {
+              "id": "cpp/toctou-race-condition",
+              "name": "TOCTOURaceCondition",
+              "shortDescription": { "text": "TOCTOU race condition" },
+              "properties": { "problem.severity": "warning" }
+            },
+            {
+              "id": "cpp/command-line-injection",
+              "name": "CommandLineInjection",
+              "shortDescription": { "text": "Uncontrolled command line" },
+              "properties": { "problem.severity": "error" }
+            },
+            {
+              "id": "cpp/format-string-vulnerability",
+              "name": "UseOfExternallyControlledFormatString",
+              "shortDescription": { "text": "Use of externally-controlled format string" },
+              "properties": { "problem.severity": "error" }
+            }
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "cpp/unbounded-write",
+          "message": { "text": "This 'strcpy' call may overflow the destination buffer 'buf' (64 bytes) with user-supplied input." },
+          "kind": "problem",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": { "uri": "src/memory_bugs.c" },
+                "region": { "startLine": 16 }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "cpp/use-after-free",
+          "message": { "text": "Memory block pointed to by 'ptr' is used after it has been freed on line 31." },
+          "kind": "problem",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": { "uri": "src/memory_bugs.c" },
+                "region": { "startLine": 33 }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "cpp/toctou-race-condition",
+          "message": { "text": "The file referenced in 'access' check is used in a subsequent 'open' call. An attacker may be able to replace the file between the check and the use." },
+          "kind": "problem",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": { "uri": "src/logic_bugs.c" },
+                "region": { "startLine": 19 }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "cpp/command-line-injection",
+          "message": { "text": "This argument to 'system' depends on user input; an attacker can inject arbitrary OS commands via the 'filename' parameter." },
+          "kind": "problem",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": { "uri": "src/format_injection.c" },
+                "region": { "startLine": 30 }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "cpp/format-string-vulnerability",
+          "message": { "text": "The format argument to 'printf' is user-controlled; an attacker can read or write arbitrary memory using format specifiers." },
+          "kind": "problem",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": { "uri": "src/format_injection.c" },
+                "region": { "startLine": 18 }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

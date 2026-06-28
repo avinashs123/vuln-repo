@@ -1,0 +1,46 @@
+name: "CodeQL Security Analysis"
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  schedule:
+    - cron: '0 8 * * 1'   # Weekly Monday 8am UTC
+  workflow_dispatch:
+
+jobs:
+  analyze:
+    name: Analyze C/C++
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v3
+      with:
+        languages: cpp
+        # Use the security-and-quality query suite for maximum coverage
+        queries: security-and-quality
+
+    - name: Build project
+      run: make all
+
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v3
+      with:
+        category: "/language:cpp"
+        output: codeql-results
+        upload: true
+
+    - name: Upload SARIF as artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: codeql-sarif
+        path: codeql-results/*.sarif
